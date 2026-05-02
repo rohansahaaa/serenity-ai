@@ -1,0 +1,79 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: serenity_db
+      POSTGRES_USER: serenity_user
+      POSTGRES_PASSWORD: serenity_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_NAME=serenity_db
+      - DB_USER=serenity_user
+      - DB_PASSWORD=serenity_password
+      - DB_HOST=db
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - db
+      - redis
+
+  celery_worker:
+    build: .
+    command: celery -A serenity_project worker --loglevel=info
+    volumes:
+      - .:/app
+    environment:
+      - DB_NAME=serenity_db
+      - DB_USER=serenity_user
+      - DB_PASSWORD=serenity_password
+      - DB_HOST=db
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - db
+      - redis
+
+  celery_beat:
+    build: .
+    command: celery -A serenity_project beat --loglevel=info
+    volumes:
+      - .:/app
+    environment:
+      - DB_NAME=serenity_db
+      - DB_USER=serenity_user
+      - DB_PASSWORD=serenity_password
+      - DB_HOST=db
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - db
+      - redis
+
+  flower:
+    build: .
+    command: celery -A serenity_project flower --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+
+volumes:
+  postgres_data:
