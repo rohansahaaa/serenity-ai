@@ -1,6 +1,7 @@
-"""AI Chat views - powered by OpenAI with Redis session caching"""
-import openai
+"""AI Chat views - powered by Groq  with Redis session caching"""
 import json 
+from groq import Groq
+import os
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .ai_service import AIService
@@ -91,14 +92,13 @@ class ChatMessageView(APIView):
         mood_context = self._get_mood_context(request.user)
 
         try:
-            client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+            client =Groq(api_key=os.getenv("GROQ_API_KEY"))
 
             system_with_context = self.SYSTEM_PROMPT
             if mood_context:
                 system_with_context += f"\n\nUser's recent mood context: {mood_context}"
 
             response = client.chat.completions.create(
-                model=settings.OPENAI_MODEL,
                 messages=[
                     {"role": "system", "content": system_with_context},
                     *history
@@ -131,7 +131,7 @@ class ChatMessageView(APIView):
                 'tokens_used': tokens_used,
             })
 
-        except openai.APIError as e:
+        except Exception as e:
             return Response({'error': 'AI service temporarily unavailable. Please try again.'},
                           status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
