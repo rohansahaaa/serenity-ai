@@ -33,13 +33,7 @@ httpx==0.28.1
 idna==3.13
 jiter==0.14.0
 kiwisolver==1.4.5
-matplotlib==3.8.2
-mysql==0.0.3
-mysql-connector==2.2.9
-mysqlclient==2.2.1
-numpy==1.26.3
 packaging==23.2
-pandas==2.1.4
 pillow==10.2.0
 proto-plus==1.27.2
 protobuf==5.29.6
