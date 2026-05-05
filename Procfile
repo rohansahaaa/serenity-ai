@@ -1,0 +1,1 @@
+web: gunicorn serenity_ai.wsgi:application

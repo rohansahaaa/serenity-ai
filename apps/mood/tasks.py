@@ -1,5 +1,5 @@
 """Mood async tasks powered by OpenAI via Celery"""
-from celery import shared_task
+#from celery import shared_task
 import openai
 from django.conf import settings
 import json
@@ -8,7 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@shared_task(bind=True, max_retries=3)
+
 def analyze_mood_with_ai(self, mood_log_id):
     """
     Async task: Analyze a mood log entry using OpenAI GPT-4.
@@ -65,8 +65,8 @@ def analyze_mood_with_ai(self, mood_log_id):
         raise self.retry(exc=exc, countdown=60)
 
 
-@shared_task(bind=True, max_retries=3)
-def analyze_journal_with_ai(self, journal_id):
+#@shared_task(bind=True, max_retries=3)
+def analyze_mood_with_ai(mood_log_id):
     """
     Async task: Perform NLP analysis on journal entry.
     Extracts themes, sentiment score, and key emotions.
@@ -113,7 +113,7 @@ def analyze_journal_with_ai(self, journal_id):
         raise self.retry(exc=exc, countdown=60)
 
 
-@shared_task
+#@shared_task
 def send_daily_mood_reminder():
     """Celery Beat task: Send daily mood check-in reminders at 9 AM"""
     from apps.users.models import CustomUser
@@ -132,7 +132,7 @@ def send_daily_mood_reminder():
     return f"Reminders sent to {count} users"
 
 
-@shared_task
+#@shared_task
 def generate_weekly_insights():
     """Celery Beat task: Generate weekly AI insights for all active users"""
     from apps.users.models import CustomUser

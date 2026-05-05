@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">Mood Analytics</span>
+    <h1>Mood History & Analysis</h1>
+    <p>Track your emotional patterns across week, month, and year.</p>
+</section>
+
+<section class="stats-grid">
+    <div class="stat-card">
+        <p>This Week</p>
+        <h2>{{ weekly_count }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <p>This Month</p>
+        <h2>{{ monthly_count }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <p>This Year</p>
+        <h2>{{ yearly_count }}</h2>
+    </div>
+</section>
+
+<section class="split-layout">
+    <div class="glass-panel">
+        <span class="eyebrow">AI-style Pattern Insight</span>
+        <h2>Most Common Mood: {{ common_mood }}</h2>
+        <p class="muted-text">{{ analysis }}</p>
+    </div>
+
+    <div class="glass-panel">
+        <span class="eyebrow">Mood Distribution</span>
+        <h2>Yearly Mood Breakdown</h2>
+
+        <div class="mood-bars">
+            {% for mood, count in mood_counts.items %}
+            <div class="mood-bar-row">
+                <span>{{ mood }}</span>
+                <div class="mood-bar">
+                    <div style="width: {{ count }}0%;"></div>
+                </div>
+                <small>{{ count }}</small>
+            </div>
+            {% empty %}
+            <p>No mood data yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="journal-chat-history">
+    <div class="journal-chat-header">
+        <span class="eyebrow">Recent Mood Logs</span>
+        <h2>Mood Timeline</h2>
+        <p class="muted-text">Your latest mood check-ins appear below.</p>
+    </div>
+
+    <div class="journal-chat-list">
+        {% for mood in recent_moods %}
+        <div class="journal-chat-item">
+            <div class="journal-chat-icon">☺</div>
+
+            <div class="journal-chat-content">
+                <div class="journal-chat-top">
+                    <h3>{{ mood.mood }}</h3>
+                    <span>{{ mood.created_at|date:"M d" }}</span>
+                </div>
+
+                <p>{{ mood.note|truncatechars:130 }}</p>
+
+                {% if mood.ai_response %}
+                <p><strong>AI:</strong> {{ mood.ai_response|truncatechars:160 }}</p>
+                {% endif %}
+
+                <small>{{ mood.created_at|time:"h:i A" }}</small>
+            </div>
+        </div>
+        {% empty %}
+        <div class="journal-chat-empty">
+            <h3>No mood history yet</h3>
+            <p>Start using the mood analysis page to build your history.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

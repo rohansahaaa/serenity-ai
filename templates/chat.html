@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="page-header">
+    <div>
+        <span class="eyebrow">AI Support Space</span>
+        <h1>Talk to Serenity AI</h1>
+        <p>A calm, private space to express your emotions and receive supportive guidance.</p>
+    </div>
+</section>
+
+<section class="split-layout">
+
+    <div class="chat-window">
+        <div class="chat-header">
+            <div class="bot-avatar">AI</div>
+            <div>
+                <h3>Serenity AI</h3>
+                <p>Emotional support assistant</p>
+            </div>
+        </div>
+
+        <div class="chat-bubble bot">
+            Hi, I’m Serenity AI. Tell me what you’re feeling today.
+        </div>
+
+        {% if reply %}
+        <div class="chat-bubble user">
+            {{ request.POST.message }}
+        </div>
+
+        <div class="chat-bubble bot">
+            {{ reply }}
+        </div>
+        {% endif %}
+
+        <form method="post" class="chat-input">
+            {% csrf_token %}
+            <textarea name="message" placeholder="Write your message here..." required></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <div class="glass-panel">
+        <span class="eyebrow">Support Features</span>
+        <h2>Designed for mindful conversations</h2>
+
+        <div class="feature-list">
+            <div>
+                <h3>Empathetic Replies</h3>
+                <p>Responses are supportive, calm, and emotionally aware.</p>
+            </div>
+
+            <div>
+                <h3>Reflection Prompts</h3>
+                <p>Encourages journaling and healthy emotional expression.</p>
+            </div>
+
+            <div>
+                <h3>Mindfulness Suggestions</h3>
+                <p>Suggests breathing, grounding, and meditation practices.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

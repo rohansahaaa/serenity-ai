@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Daily Reflection</span>
+        <h1>Wellness Journal</h1>
+        <p>Write your thoughts, reflect on your emotions, and build self-awareness.</p>
+    </div>
+</section>
+
+<section class="journal-layout">
+
+    <!-- LEFT: Journal Form -->
+    <div class="glass-panel journal-form-panel">
+        <h2>Write a new entry</h2>
+
+        <form method="post" class="premium-form">
+            {% csrf_token %}
+
+            <label>Title</label>
+            <input type="text" name="title" placeholder="Example: Today I felt..." required>
+
+            <label>Journal Entry</label>
+            <textarea name="content" placeholder="Write your thoughts here..." required></textarea>
+
+            <button type="submit">Save Entry</button>
+        </form>
+
+        {% if saved %}
+        <div class="success-message">
+            <p>✔ Journal entry saved successfully</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- RIGHT: Reflection UI -->
+    <div class="journal-insight-panel">
+
+        <div class="floating-card">
+            <span>Reflection Insight</span>
+            <h3>Writing helps clarity</h3>
+            <p>
+                Journaling helps you process emotions and identify patterns over time.
+            </p>
+        </div>
+
+        <div class="journal-prompts">
+            <h3>Suggested Prompts</h3>
+
+            <ul>
+                <li>What made me feel good today?</li>
+                <li>What challenged me emotionally?</li>
+                <li>What can I improve tomorrow?</li>
+                <li>What am I grateful for today?</li>
+            </ul>
+        </div>
+
+        <div class="habit-box">
+            <p>Consistency</p>
+            <div class="progress-bar">
+                <div style="width: 60%"></div>
+            </div>
+            <small>Keep writing daily to build awareness</small>
+        </div>
+
+    </div>
+
+</section>
+<section class="journal-chat-history">
+    <div class="journal-chat-header">
+        <span class="eyebrow">Saved Reflections</span>
+        <h2>Journal History</h2>
+        <p class="muted-text">Your saved entries appear like a clean chat history.</p>
+    </div>
+
+    <div class="journal-chat-list">
+        {% for journal in journals %}
+        <div class="journal-chat-item">
+            <div class="journal-chat-icon">✦</div>
+
+            <div class="journal-chat-content">
+                <div class="journal-chat-top">
+                    <h3>{{ journal.title }}</h3>
+                    <span>{{ journal.created_at|date:"M d" }}</span>
+                </div>
+
+                <p>{{ journal.content|truncatechars:120 }}</p>
+
+                <small>{{ journal.created_at|time:"h:i A" }}</small>
+            </div>
+        </div>
+        {% empty %}
+        <div class="journal-chat-empty">
+            <h3>No journal history yet</h3>
+            <p>Your saved reflections will appear here.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

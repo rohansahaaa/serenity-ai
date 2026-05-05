@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Daily Check-In</span>
+        <h1>Mood Check-In</h1>
+        <p>Record how you feel today and receive a calm AI wellness response.</p>
+    </div>
+</section>
+
+<section class="split-layout">
+
+    <div class="glass-panel">
+        <h2>How are you feeling?</h2>
+        <p class="muted-text">
+            Your mood entry helps Serenity AI understand emotional patterns and suggest better mindfulness practices.
+        </p>
+
+        <form method="post" class="premium-form">
+            {% csrf_token %}
+
+            <label>Select your mood</label>
+            <select name="mood" required>
+                <option value="">Choose mood</option>
+                <option>Happy</option>
+                <option>Calm</option>
+                <option>Anxious</option>
+                <option>Sad</option>
+                <option>Stressed</option>
+                <option>Energetic</option>
+                <option>Tired</option>
+            </select>
+
+            <label>Write a short note</label>
+            <textarea name="note" placeholder="Example: I feel stressed because of exams..." required></textarea>
+
+            <button type="submit">Analyze My Mood</button>
+        </form>
+    </div>
+
+    <div class="insight-panel">
+        <div class="floating-card">
+            <span>Today’s Focus</span>
+            <h3>Breathe. Reflect. Reset.</h3>
+            <p>
+                Small check-ins build emotional awareness over time.
+            </p>
+        </div>
+
+        <div class="mood-orbit">
+            <div>Calm</div>
+            <div>Anxious</div>
+            <div>Happy</div>
+            <div>Focused</div>
+        </div>
+    </div>
+
+</section>
+
+{% if response %}
+<section class="ai-response-section">
+    <div class="response-card premium-response">
+        <span class="eyebrow">AI Wellness Response</span>
+        <h2>Serenity AI says</h2>
+        <p>{{ response }}</p>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

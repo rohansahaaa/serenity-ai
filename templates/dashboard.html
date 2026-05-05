@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">Mood Deep Analysis</span>
+    <h1>Personal Wellness Score</h1>
+    <p>Answer a few questions so Serenity AI can understand your mood better.</p>
+</section>
+
+<section class="split-layout">
+
+    <div class="glass-panel">
+        <h2>Your Current Mood</h2>
+        <p class="muted-text">Mood selected from your last check-in:</p>
+
+        <div class="floating-card">
+            <span>Selected Mood</span>
+            <h3>{{ mood }}</h3>
+            <p>{{ note }}</p>
+        </div>
+
+        <form method="post" action="/dashboard/" class="premium-form">
+            {% csrf_token %}
+
+            <label>How was your sleep?</label>
+            <select name="sleep" required>
+                <option value="1">Very Poor</option>
+                <option value="2">Poor</option>
+                <option value="3" selected>Average</option>
+                <option value="4">Good</option>
+                <option value="5">Excellent</option>
+            </select>
+
+            <label>How stressed do you feel?</label>
+            <select name="stress" required>
+                <option value="1">Not stressed</option>
+                <option value="2">Slightly stressed</option>
+                <option value="3" selected>Moderate</option>
+                <option value="4">Very stressed</option>
+                <option value="5">Extremely stressed</option>
+            </select>
+
+            <label>How is your energy level?</label>
+            <select name="energy" required>
+                <option value="1">Very low</option>
+                <option value="2">Low</option>
+                <option value="3" selected>Average</option>
+                <option value="4">Good</option>
+                <option value="5">High</option>
+            </select>
+
+            <label>Do you feel socially supported?</label>
+            <select name="social" required>
+                <option value="1">Not at all</option>
+                <option value="2">A little</option>
+                <option value="3" selected>Somewhat</option>
+                <option value="4">Supported</option>
+                <option value="5">Very supported</option>
+            </select>
+
+            <button type="submit">Generate Wellness Score</button>
+        </form>
+    </div>
+
+    <div class="glass-panel">
+        <span class="eyebrow">Analysis Result</span>
+
+        {% if score is not None %}
+        <h2>Your Wellness Score</h2>
+
+        <div class="score-meter-card">
+            <div class="score-ring" data-score="{{ score }}">
+                <svg viewBox="0 0 160 160">
+                    <defs>
+                        <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8" />
+                            <stop offset="100%" stop-color="#22c55e" />
+                        </linearGradient>
+                    </defs>
+
+                    <circle class="score-bg" cx="80" cy="80" r="68"></circle>
+                    <circle class="score-progress" cx="80" cy="80" r="68"></circle>
+                </svg>
+
+                <div class="score-number">
+                    <span id="scoreValue">0</span>%
+                </div>
+            </div>
+
+            <p>Today’s Wellness Score</p>
+            <small>{{ summary }}</small>
+        </div>
+
+        <h3 style="margin-top: 30px;">Personal Suggestions</h3>
+
+        <div class="feature-list">
+            {% for suggestion in suggestions %}
+            <div>
+                <h3>Suggestion {{ forloop.counter }}</h3>
+                <p>{{ suggestion }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <h2>Complete the questions</h2>
+        <p class="muted-text">
+            Your personalized wellness score and suggestions will appear here after analysis.
+        </p>
+
+        <div class="floating-card">
+            <span>How it works</span>
+            <h3>Score Logic</h3>
+            <p>
+                Serenity AI considers mood, sleep, stress, energy, and social support to estimate wellness.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+</section>
+
+<section class="cta">
+    <h2>Need immediate support?</h2>
+    <p>Use the AI mood page or chat page to receive a supportive wellness response.</p>
+    <a href="/mood-page/" class="primary-btn">Back to Mood Check</a>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const ring = document.querySelector(".score-ring");
+    if (!ring) return;
+
+    const targetScore = parseInt(ring.dataset.score || "0");
+    const circle = document.querySelector(".score-progress");
+    const number = document.getElementById("scoreValue");
+
+    const radius = 68;
+    const circumference = 2 * Math.PI * radius;
+
+    circle.style.strokeDasharray = circumference;
+    circle.style.strokeDashoffset = circumference;
+
+    setTimeout(() => {
+        const offset = circumference - (targetScore / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+    }, 200);
+
+    let current = 0;
+    const counter = setInterval(() => {
+        if (current >= targetScore) {
+            clearInterval(counter);
+        } else {
+            current++;
+            number.innerText = current;
+        }
+    }, 18);
+});
+</script>
+
+{% endblock %}

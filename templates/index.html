@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="hero premium-hero">
+    <div class="hero-left">
+        <div class="badge">AI-Powered Mental Wellness</div>
+
+        <h1>Personalized emotional wellness powered by AI.</h1>
+
+        <p>
+            Serenity AI helps users understand emotional patterns, receive supportive AI guidance,
+            journal their thoughts, and follow mindfulness practices designed for daily balance.
+        </p>
+
+        <div class="hero-actions">
+            <a href="/mood-page/" class="primary-btn">Start Mood Check</a>
+            <a href="/chat-page/" class="secondary-btn">Talk to AI</a>
+        </div>
+
+        <div class="trust-row">
+            <span>● Mood Tracking</span>
+            <span>● AI Chat</span>
+            <span>● Journaling</span>
+            <span>● Mindfulness</span>
+        </div>
+    </div>
+
+    <div class="device-card">
+        <div class="device-header">
+            <span></span><span></span><span></span>
+        </div>
+
+        <div class="mood-score">
+            <p>Wellness Score</p>
+            <h2>84%</h2>
+            <small>+12% improvement this week</small>
+        </div>
+
+        <div class="mini-chart">
+            <div style="height:50%"></div>
+            <div style="height:72%"></div>
+            <div style="height:45%"></div>
+            <div style="height:88%"></div>
+            <div style="height:65%"></div>
+            <div style="height:95%"></div>
+        </div>
+
+        <div class="chat-preview">
+            <strong>Serenity AI</strong>
+            <p>You seem stressed today. Try a 5-minute breathing exercise and write one thought you want to let go.</p>
+        </div>
+    </div>
+</section>
+
+<section class="metrics">
+    <div>
+        <h2>24/7</h2>
+        <p>AI support</p>
+    </div>
+    <div>
+        <h2>5+</h2>
+        <p>Wellness modules</p>
+    </div>
+    <div>
+        <h2>100%</h2>
+        <p>Django powered</p>
+    </div>
+    <div>
+        <h2>DRF</h2>
+        <p>REST API backend</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Built like a real wellness product</h2>
+    <p class="section-subtitle">A complete full-stack Django platform with AI-ready architecture.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">🧠</div>
+            <h3>Mood Intelligence</h3>
+            <p>Track emotions, notes, and behavioral changes through structured mood logs.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">💬</div>
+            <h3>AI Emotional Chat</h3>
+            <p>Supportive responses generated through a modular AI service layer.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">🌿</div>
+            <h3>Mindfulness Engine</h3>
+            <p>Personalized meditation, breathing, journaling, and relaxation practices.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">🔐</div>
+            <h3>Secure Backend</h3>
+            <p>Django admin, authentication, REST APIs, and clean database models.</p>
+        </div>
+    </div>
+</section>
+
+<section class="workflow">
+    <h2>How Serenity AI works</h2>
+
+    <div class="steps">
+        <div class="step">
+            <span>01</span>
+            <h3>Log Mood</h3>
+            <p>User records mood and notes.</p>
+        </div>
+
+        <div class="step">
+            <span>02</span>
+            <h3>Analyze</h3>
+            <p>AI service interprets emotional context.</p>
+        </div>
+
+        <div class="step">
+            <span>03</span>
+            <h3>Recommend</h3>
+            <p>System suggests mindfulness practices.</p>
+        </div>
+
+        <div class="step">
+            <span>04</span>
+            <h3>Track</h3>
+            <p>Dashboard shows progress over time.</p>
+        </div>
+    </div>
+</section>
+
+<section class="testimonial-section">
+    <div class="testimonial">
+        <p>
+            “Serenity AI feels like a complete wellness platform — clean UI, structured APIs,
+            admin management, mood tracking, and AI support.”
+        </p>
+        <strong>Project Evaluation Preview</strong>
+    </div>
+</section>
+
+<section class="cta premium-cta">
+    <h2>Ready to check in with yourself?</h2>
+    <p>Start with a quick mood check and let Serenity AI guide your next step.</p>
+    <a href="/mood-page/" class="primary-btn">Begin Now</a>
+</section>
+
+{% endblock %}

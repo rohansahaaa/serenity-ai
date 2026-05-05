@@ -3,8 +3,7 @@ import openai
 import json 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
-from services.ai_service import AIService
+from .ai_service import AIService
 from django.conf import settings
 from django.core.cache import cache
 from rest_framework.views import APIView

@@ -1,7 +1,7 @@
 """Celery Configuration for Serenity AI"""
 import os
-from celery import Celery
-from celery.schedules import crontab
+#rom celery import Celery
+#from celery.schedules import crontab
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'serenity_project.settings')
 

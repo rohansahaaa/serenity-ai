@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">Guided Practice</span>
+    <h1>Serenity Breathing Studio</h1>
+    <p>A premium interactive breathing space designed to help you calm your mind and reset your focus.</p>
+</section>
+
+<section class="practice-studio">
+
+    <div class="practice-left glass-panel">
+        <span class="eyebrow">Choose Session</span>
+        <h2>Start a guided reset</h2>
+        <p class="muted-text">
+            Select your session length and follow the breathing circle. Inhale, hold, and exhale slowly.
+        </p>
+
+        <div class="session-options">
+            <button class="session-btn active" data-rounds="3">Quick Reset<br><small>1 min</small></button>
+            <button class="session-btn" data-rounds="6">Deep Calm<br><small>3 min</small></button>
+            <button class="session-btn" data-rounds="10">Full Focus<br><small>5 min</small></button>
+        </div>
+
+        <button id="startPracticeBtn" class="primary-btn full-btn">Start Practice</button>
+        <button id="stopPracticeBtn" class="secondary-btn full-btn" style="display:none;">Stop Session</button>
+    </div>
+
+    <div class="practice-center glass-panel">
+        <h2 id="practiceStep">Ready</h2>
+        <p id="practiceInstruction">Choose a session and begin when you are ready.</p>
+
+        <div class="breathing-orb-wrap">
+            <div class="breathing-orb">
+                <span id="orbText">Breathe</span>
+            </div>
+        </div>
+
+        <div class="practice-timer">
+            <span id="practiceTimer">00</span>s
+        </div>
+
+        <div class="practice-progress">
+            <div id="practiceProgress"></div>
+        </div>
+
+        <p id="roundInfo">Round 0 of 0</p>
+    </div>
+
+    <div class="practice-right glass-panel">
+        <span class="eyebrow">Wellness Benefits</span>
+        <h2>Why this helps</h2>
+
+        <div class="feature-list">
+            <div>
+                <h3>Reduces Stress</h3>
+                <p>Slow breathing helps your body shift into a calmer state.</p>
+            </div>
+
+            <div>
+                <h3>Improves Focus</h3>
+                <p>Rhythmic breathing brings attention back to the present moment.</p>
+            </div>
+
+            <div>
+                <h3>Emotional Reset</h3>
+                <p>A short pause can help you respond instead of react.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<section id="completionCard" class="cta" style="display:none;">
+    <h2>Session Complete</h2>
+    <p>You completed your guided breathing practice. Take a moment to notice how your body feels now.</p>
+    <a href="/mood-page/" class="primary-btn">Check Mood Again</a>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const startBtn = document.getElementById("startPracticeBtn");
+    const stopBtn = document.getElementById("stopPracticeBtn");
+    const stepText = document.getElementById("practiceStep");
+    const instruction = document.getElementById("practiceInstruction");
+    const timerText = document.getElementById("practiceTimer");
+    const orb = document.querySelector(".breathing-orb");
+    const orbText = document.getElementById("orbText");
+    const progress = document.getElementById("practiceProgress");
+    const roundInfo = document.getElementById("roundInfo");
+    const completionCard = document.getElementById("completionCard");
+    const sessionBtns = document.querySelectorAll(".session-btn");
+
+    let totalRounds = 3;
+    let currentRound = 1;
+    let phaseIndex = 0;
+    let interval = null;
+    let completedPhases = 0;
+
+    const phases = [
+        { name: "Inhale", seconds: 4, instruction: "Slowly breathe in through your nose.", className: "inhale" },
+        { name: "Hold", seconds: 4, instruction: "Hold gently. Keep your shoulders relaxed.", className: "hold" },
+        { name: "Exhale", seconds: 6, instruction: "Exhale slowly and release tension.", className: "exhale" }
+    ];
+
+    sessionBtns.forEach(btn => {
+        btn.addEventListener("click", function () {
+            sessionBtns.forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+            totalRounds = parseInt(this.dataset.rounds);
+            roundInfo.innerText = `Round 0 of ${totalRounds}`;
+            progress.style.width = "0%";
+            completionCard.style.display = "none";
+        });
+    });
+
+    startBtn.addEventListener("click", function () {
+        startBtn.style.display = "none";
+        stopBtn.style.display = "inline-block";
+        completionCard.style.display = "none";
+
+        currentRound = 1;
+        phaseIndex = 0;
+        completedPhases = 0;
+        runPhase();
+    });
+
+    stopBtn.addEventListener("click", stopSession);
+
+    function runPhase() {
+        clearInterval(interval);
+
+        if (currentRound > totalRounds) {
+            completeSession();
+            return;
+        }
+
+        const phase = phases[phaseIndex];
+        let timeLeft = phase.seconds;
+
+        orb.className = "breathing-orb " + phase.className;
+        stepText.innerText = phase.name;
+        orbText.innerText = phase.name;
+        instruction.innerText = phase.instruction;
+        timerText.innerText = timeLeft;
+        roundInfo.innerText = `Round ${currentRound} of ${totalRounds}`;
+
+        interval = setInterval(() => {
+            timeLeft--;
+            timerText.innerText = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+
+                completedPhases++;
+                const totalPhases = totalRounds * phases.length;
+                progress.style.width = ((completedPhases / totalPhases) * 100) + "%";
+
+                phaseIndex++;
+
+                if (phaseIndex >= phases.length) {
+                    phaseIndex = 0;
+                    currentRound++;
+                }
+
+                runPhase();
+            }
+        }, 1000);
+    }
+
+    function stopSession() {
+        clearInterval(interval);
+        startBtn.style.display = "inline-block";
+        stopBtn.style.display = "none";
+        stepText.innerText = "Paused";
+        instruction.innerText = "Session stopped. Start again whenever you are ready.";
+        timerText.innerText = "00";
+        orb.className = "breathing-orb";
+        orbText.innerText = "Breathe";
+    }
+
+    function completeSession() {
+        clearInterval(interval);
+        startBtn.style.display = "inline-block";
+        stopBtn.style.display = "none";
+        stepText.innerText = "Complete";
+        instruction.innerText = "Well done. You completed your breathing session.";
+        timerText.innerText = "00";
+        orb.className = "breathing-orb complete";
+        orbText.innerText = "Done";
+        progress.style.width = "100%";
+        completionCard.style.display = "block";
+    }
+});
+</script>
+
+{% endblock %}
