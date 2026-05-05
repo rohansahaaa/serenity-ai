@@ -1,1 +1,1 @@
-web: gunicorn serenity_ai.wsgi:application
+web: python manage.py migrate && gunicorn serenity_ai.wsgi:application
