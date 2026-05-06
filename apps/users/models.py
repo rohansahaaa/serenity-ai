@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
     timezone = models.CharField(max_length=50, default='UTC')
     notification_enabled = models.BooleanField(default=True)
     onboarding_complete = models.BooleanField(default=False)
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+   # avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
